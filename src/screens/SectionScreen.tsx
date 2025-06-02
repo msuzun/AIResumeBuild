@@ -89,6 +89,27 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
         }
     }
     const data = getSectionData(section);
+    const handleAddPress = () => {
+        const sectionRouteMap :{[key:string]:string} = {
+            projects:"AddProject",
+            qualifications:"AddQualification",
+            skills:"AddSkill",
+            "hobbies/interests":"AddHobby",
+            languages:"AddLanguage",
+            organisations:"AddOrganization",
+            certificates:"AddCertificate",
+            experience:"AddExperience",
+            awards:"AddAward"
+            
+        }
+        const routeName = sectionRouteMap[section];
+        if(routeName){
+            navigation.navigate(routeName as never,{section});
+        }
+        else{
+            console.log("No route name found for section:", section);
+        }
+    }
     return (
         <View style={styles.container}>
             <StatusBar barStyle={"light-content"} backgroundColor={"#007AFF"} />
@@ -106,14 +127,14 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
                     <Ionicons name={iconName} size={60} color="#fff" />
                     <Text style={styles.message}>No {section} added yet...</Text>
                     <Text style={styles.subMessage}>Click on the plus button to add {section}</Text>
-                    <TouchableOpacity style={styles.addButton}>
+                    <TouchableOpacity onPress={handleAddPress} style={styles.addButton}>
                         <Ionicons name="add" size={24} color="#fff" />
                     </TouchableOpacity>
                 </Animated.View>
             ) : (
                 <View style={styles.listContainer}>
                     <FlatList data={data} renderItem={renderItem} keyExtractor={(item, index) => `${section}-${index}`} contentContainerStyle={styles.listContainer} />
-                    <TouchableOpacity style={styles.addButtonFloating}>
+                    <TouchableOpacity  style={styles.addButtonFloating}>
                         <Ionicons name="add" size={24} color="#fff" />
                     </TouchableOpacity>
                 </View>

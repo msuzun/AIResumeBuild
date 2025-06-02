@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const AddProjectScreen = () => {
+const AddAwardScholarship = () => {
   return (
     <View>
-      <Text>AddProjectScreen</Text>
+      <Text>AddAwardScholarship</Text>
     </View>
   )
 }
 
-export default AddProjectScreen
+export default AddAwardScholarship
 
 const styles = StyleSheet.create({})

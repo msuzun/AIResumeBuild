@@ -18,7 +18,8 @@ import AddCertificateScreen from "../screens/AddCertificateScreen";
 import AddLanguageScreen from "../screens/AddLanguageScreen";
 import AddSkillScreen from "../screens/AddSkillScreen";
 import AddQualificationScreen from "../screens/AddQualificationScreen";
-
+import AddAwardScholarship from "../screens/AddAwardScholarship";
+import AddProjectScreen from "../screens/AddProjectScreen";
 const Stack = createNativeStackNavigator();
 
 const ProfileStackNavigator = () => {
@@ -43,6 +44,8 @@ const ProfileStackNavigator = () => {
             <Stack.Screen name="AddLanguage" component={AddLanguageScreen} options={{ headerShown: false }} />
             <Stack.Screen name="AddSkill" component={AddSkillScreen} options={{ headerShown: false }} />
             <Stack.Screen name="AddQualification" component={AddQualificationScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="AddAward" component={AddAwardScholarship} options={{ headerShown: false }} />
+            <Stack.Screen name="AddProject" component={AddProjectScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
