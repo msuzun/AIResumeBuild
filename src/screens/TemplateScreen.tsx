@@ -90,6 +90,9 @@ const TemplateScreen = () => {
                     </View>
                 </View>
             </View>
+            <TouchableOpacity style={styles.useButton}>
+                <Text style={styles.useButtonText}>Use this template</Text>
+            </TouchableOpacity>
         </View>
     )
     return (
@@ -206,5 +209,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#333",
         marginBottom:4,
+    },
+    useButton:{
+        backgroundColor: "#007AFF",
+        paddingVertical: 12,
+        alignItems: "center"
+    },
+    useButtonText:{
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "600"
     }
 })
