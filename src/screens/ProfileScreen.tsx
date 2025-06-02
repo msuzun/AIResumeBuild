@@ -1,11 +1,32 @@
 import { StatusBar, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+type RootStackParamList = {
+  PersonalDetailsScreen: undefined;
+  Education: undefined;
+  Experience: undefined;
+  Skills: undefined;
+  Projects: undefined;
+  Certifications: undefined;
+  Languages: undefined;
+  Interests: undefined;
+  References: undefined;
+  SocialMedia: undefined;
+  Notifications: undefined;
+  Privacy: undefined;
+  Security: undefined;
+  Settings: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const ProfileScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const profileSections = [
-    { id: '1', title: 'Personal Details', icon: 'person-outline', screen: "PersonalDetails" },
+    { id: '1', title: 'Personal Details', icon: 'person-outline', screen: "PersonalDetailsScreen" },
     { id: '2', title: 'Education', icon: 'school-outline', screen: "Education" },
     { id: '3', title: 'Experience', icon: 'briefcase-outline', screen: "Experience" },
     { id: '4', title: 'Skills', icon: 'build-outline', screen: "Skills" },
@@ -23,14 +44,16 @@ const ProfileScreen = () => {
   const renderSection = ({ item, index }: { item: (typeof profileSections)[0]; index: number; }) => {
     return (
       <View>
-        <TouchableOpacity style={styles.section}>
-          <Ionicons name={item.icon} size={24} color="#007AFF" />
+        <TouchableOpacity 
+          style={styles.section} 
+          onPress={() => navigation.navigate(item.screen as keyof RootStackParamList)}
+        >
+          <Ionicons name={item.icon as any} size={24} color="#007AFF" />
           <Text style={styles.sectionTitle}>{item?.title}</Text>
           <Ionicons name="chevron-forward" size={24} color="#ccc" />
         </TouchableOpacity>
       </View>
     )
-
   }
   return (
     <View style={styles.container}>

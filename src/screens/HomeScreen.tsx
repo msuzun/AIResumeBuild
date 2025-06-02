@@ -1,10 +1,30 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+type RootTabParamList = {
+    HomeTab: undefined;
+    TemplateTab: { screen: string };
+    ProfileTab: undefined;
+};
+
+type HomeStackParamList = {
+    Home: undefined;
+    Template: undefined;
+};
+
+type HomeScreenNavigationProp = CompositeNavigationProp<
+    BottomTabNavigationProp<RootTabParamList, 'HomeTab'>,
+    NativeStackNavigationProp<HomeStackParamList>
+>;
+
 const HomeScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<HomeScreenNavigationProp>();
     return (
         <LinearGradient colors={["#4B6CB7", "#182848"]} style={styles.container}>
             <View style={styles.circleTopLeft} />
