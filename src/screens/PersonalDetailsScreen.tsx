@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
         fontSize:20,
         fontWeight:"bold",
         color:"#fff",
-        marginLeft:10,
+        flex:1,
+        textAlign:"center",
       },
       formContainer:{
         flex:1,

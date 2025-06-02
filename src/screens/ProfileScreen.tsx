@@ -26,20 +26,18 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const profileSections = [
-    { id: '1', title: 'Personal Details', icon: 'person-outline', screen: "PersonalDetailsScreen" },
-    { id: '2', title: 'Education', icon: 'school-outline', screen: "Education" },
-    { id: '3', title: 'Experience', icon: 'briefcase-outline', screen: "Experience" },
-    { id: '4', title: 'Skills', icon: 'build-outline', screen: "Skills" },
-    { id: '5', title: 'Projects', icon: 'folder-outline', screen: "Projects" },
-    { id: '6', title: 'Certifications', icon: 'document-text-outline', screen: "Certifications" },
-    { id: '7', title: 'Languages', icon: 'language-outline', screen: "Languages" },
-    { id: '8', title: 'Interests', icon: 'heart-outline', screen: "Interests" },
-    { id: '9', title: 'References', icon: 'person-outline', screen: "References" },
-    { id: '10', title: 'Social Media', icon: 'share-outline', screen: "SocialMedia" },
-    { id: '11', title: 'Notifications', icon: 'notifications-outline', screen: "Notifications" },
-    { id: '12', title: 'Privacy', icon: 'lock-closed-outline', screen: "Privacy" },
-    { id: '13', title: 'Security', icon: 'shield-checkmark-outline', screen: "Security" },
-    { id: '14', title: 'Settings', icon: 'settings-outline', screen: "Settings" },
+    { id: '1', title: 'Personal Details', icon: 'person-outline', screen: 'PersonalDetails' },
+    { id: '2', title: 'Objective', icon: 'flag-outline', screen: 'Objective' },
+    { id: '3', title: 'Experience', icon: 'briefcase-outline', screen: 'Experience' },
+    { id: '4', title: 'Qualifications', icon: 'school-outline', screen: 'Qualifications' },
+    { id: '5', title: 'Organizations', icon: 'book-outline', screen: 'Organizations' },
+    { id: '6', title: 'Projects', icon: 'code-working-outline', screen: 'Projects' },
+    { id: '7', title: 'Certificates', icon: 'document-outline', screen: 'Certificates' },
+    { id: '8', title: 'Awards/Scholarships', icon: 'trophy-outline', screen: 'AwardsScholarships' },
+    { id: '9', title: 'Skills', icon: 'key-outline', screen: 'Skills' },
+    { id: '10', title: 'Languages', icon: 'language-outline', screen: 'Languages' },
+    { id: '11', title: 'Hobbies/Interests', icon: 'hourglass-outline', screen: 'HobbiesInterests' },
+    { id: '12', title: 'References', icon: 'people-outline', screen: 'References' },
   ];
   const renderSection = ({ item, index }: { item: (typeof profileSections)[0]; index: number; }) => {
     return (
