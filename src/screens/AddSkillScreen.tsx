@@ -5,18 +5,24 @@ import { useAppContext } from '../context/AppContext';
 import { useRoute } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { addSkill } from '../services/skillService';
+import { getToken } from '../utils/storage';
 const AddSkillScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const {addSkill} = useAppContext();
-
+  const token = getToken();
   const [skillName, setSkillName] = useState("");
   const [proficiency, setProficiency] = useState("");
 
-  const handleSave = () => {
+  const  handleSave = async () => {
     if(skillName.trim() && proficiency.trim()){
-      addSkill({skillName, proficiency});
-      navigation.goBack();
+      try{
+        await addSkill(skillName, proficiency);
+        navigation.goBack();
+      }catch(error){
+        console.error("Error adding skill:", error);
+        alert("Failed to add skill. Please try again.");
+      }
     }
     else{
       alert("Please fill all fields");

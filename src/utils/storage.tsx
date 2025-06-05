@@ -53,3 +53,10 @@ export const hasKey = async (key:string) => {
         return false;
     }
 }
+export const saveToken = async (token: string): Promise<void> => {
+    await AsyncStorage.setItem('token', token);
+};
+  
+export const getToken = async (): Promise<string | null> => {
+    return await AsyncStorage.getItem('token');
+};

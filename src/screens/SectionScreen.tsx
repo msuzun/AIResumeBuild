@@ -1,12 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View, StatusBar, FlatList } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View, StatusBar, FlatList, Modal, Pressable } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useAppContext } from '../context/AppContext';
 import { FadeIn } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/types';
+import { getSkills, Skill, deleteSkill } from '../services/skillService';
+import { getToken } from '../utils/storage';
 
 type SectionScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type SectionScreenProps = {
@@ -16,6 +18,15 @@ type SectionScreenProps = {
 }
 const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, iconName }) => {
     const navigation = useNavigation<SectionScreenNavigationProp>();
+    const [skills, setSkills] = useState<Skill[]>([]);
+    const isFocused = useIsFocused();
+    const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    useEffect(() => {
+        if(section === "skills"){
+            getSkills().then(setSkills);
+        }
+    }, [section, isFocused]);
     const renderItem = ({item}:{item:any})=>{
         if(section === "experience"){
             return(
@@ -36,9 +47,19 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
         }
         else if(section === "skills"){
             return(
-                <View style={styles.itemContainer}>
-                    <Text style={styles.itemTitle}>{item?.skill}</Text>
-                    <Text style={styles.itemDetail}>Proficiency: {item?.proficiency}</Text>
+                <View style={styles.skillItemContainer}>
+                    <View style={styles.skillIconContainer}>
+                        <Ionicons name="key-outline" size={28} color="#007AFF" />
+                    </View>
+                    <View style={styles.skillTextContainer}>
+                        <Text style={styles.skillName}>{item?.skillName}</Text>
+                        <View style={styles.proficiencyBadge}>
+                            <Text style={styles.proficiencyText}>{item?.proficiency}</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => { setSelectedSkill(item); setModalVisible(true); }} style={styles.deleteIconContainer}>
+                            <Ionicons name="trash-outline" size={22} color="#FF3B30" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         }
@@ -80,7 +101,7 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
             case "hobbies/interests":
                 return state.hobbies;
             case "skills":
-                return state.skills;
+                return skills;
             case "projects":
                 return state.projects;
             case "qualifications":
@@ -113,6 +134,14 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
             console.warn("No route name found for section:", section);
         }
     }
+    const handleDelete = async () => {
+        if (selectedSkill) {
+            await deleteSkill(selectedSkill._id);
+            setSkills(skills.filter(s => s._id !== selectedSkill._id));
+            setModalVisible(false);
+            setSelectedSkill(null);
+        }
+    };
     return (
         <View style={styles.container}>
             <StatusBar barStyle={"light-content"} backgroundColor={"#007AFF"} />
@@ -142,6 +171,27 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
                     </TouchableOpacity>
                 </View>
             )}
+            <Modal
+                visible={modalVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Delete Skill</Text>
+                        <Text style={{ marginBottom: 20 }}>Are you sure you want to delete this skill?</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                            <Pressable style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                                <Text style={{ color: '#007AFF', fontWeight: 'bold' }}>Cancel</Text>
+                            </Pressable>
+                            <Pressable style={[styles.modalButton, { marginLeft: 10 }]} onPress={handleDelete}>
+                                <Text style={{ color: '#FF3B30', fontWeight: 'bold' }}>Delete</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -252,6 +302,76 @@ const styles = StyleSheet.create({
     },
     itemDetail:{
         fontSize:12,
-    }
-
+    },
+    skillItemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 14,
+        padding: 16,
+        marginBottom: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    skillIconContainer: {
+        backgroundColor: '#E3F0FF',
+        borderRadius: 8,
+        padding: 8,
+        marginRight: 16,
+    },
+    skillTextContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    skillName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#222',
+    },
+    proficiencyBadge: {
+        backgroundColor: '#007AFF22',
+        borderRadius: 8,
+        paddingVertical: 4,
+        paddingHorizontal: 12,
+        marginLeft: 10,
+    },
+    proficiencyText: {
+        color: '#007AFF',
+        fontWeight: '600',
+        fontSize: 14,
+    },
+    deleteIconContainer: {
+        marginLeft: 12,
+        padding: 4,
+        borderRadius: 6,
+        backgroundColor: '#FFF0F0',
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 24,
+        width: 300,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 5,
+    },
+    modalButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+    },
 })
