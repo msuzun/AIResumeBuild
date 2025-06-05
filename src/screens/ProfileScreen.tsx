@@ -59,8 +59,8 @@ const ProfileScreen = () => {
       <View style={styles.header}>
         <Image source={{ uri: "https://pbs.twimg.com/profile_images/1906088503642820608/7fyYTD1i_400x400.jpg" }} style={styles.avatar} />
         <View style={styles.headerTextContainer}>
-          <Text style={styles.name}>John Doe</Text>
-          <Text style={styles.title}>Professional Title</Text>
+          <Text style={styles.name}>MSUZUN</Text>
+          <Text style={styles.title}>Software Engineer</Text>
         </View>
       </View>
 

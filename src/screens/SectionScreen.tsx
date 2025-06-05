@@ -107,7 +107,7 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
             navigation.navigate(routeName as never,{section});
         }
         else{
-            console.log("No route name found for section:", section);
+            console.warn("No route name found for section:", section);
         }
     }
     return (
