@@ -5,22 +5,25 @@ import { useNavigation } from '@react-navigation/native';
 import { useAppContext } from '../context/AppContext';
 import { FadeIn } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/types';
 
+type SectionScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type SectionScreenProps = {
     sectionName: string;
     section: string;
     iconName: keyof typeof Ionicons.glyphMap;
 }
 const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, iconName }) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<SectionScreenNavigationProp>();
     const renderItem = ({item}:{item:any})=>{
         if(section === "experience"){
             return(
                 <View style={styles.itemContainer}>
                     <Text style={styles.itemTitle}>{item?.jobTitle}</Text>  
-                    <Text style={styles.itemSubtitle}>{item?.companyName} + {item?.location}</Text>
+                    <Text style={styles.itemSubtitle}>{item?.companyName} • {item?.location}</Text>
                     <Text style={styles.itemDetail}>{item?.duration}</Text>
-                    <Text style={styles.itemDescription}>{item?.description}</Text>
+                    <Text style={styles.itemDetail}>{item?.description}</Text>
                 </View>
             )
         }
@@ -104,7 +107,7 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
         }
         const routeName = sectionRouteMap[section];
         if(routeName){
-            navigation.navigate(routeName as never,{section});
+            navigation.navigate(routeName as any,{section} as any);
         }
         else{
             console.warn("No route name found for section:", section);
