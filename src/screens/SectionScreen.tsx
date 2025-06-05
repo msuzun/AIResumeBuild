@@ -27,7 +27,7 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
         else if(section === "hobbies/interests"){
             return(
                 <View style={styles.itemContainer}>
-                    <Text style={styles.itemTitle}>{item?.bobby}</Text>
+                    <Text style={styles.itemTitle}>{item?.hobby}</Text>
                 </View>
             )
         }
@@ -134,7 +134,7 @@ const SectionScreen: React.FC<SectionScreenProps> = ({ sectionName, section, ico
             ) : (
                 <View style={styles.listContainer}>
                     <FlatList data={data} renderItem={renderItem} keyExtractor={(item, index) => `${section}-${index}`} contentContainerStyle={styles.listContainer} />
-                    <TouchableOpacity  style={styles.addButtonFloating}>
+                    <TouchableOpacity  style={styles.addButtonFloating} onPress={handleAddPress}>
                         <Ionicons name="add" size={24} color="#fff" />
                     </TouchableOpacity>
                 </View>
@@ -235,6 +235,20 @@ const styles = StyleSheet.create({
         shadowOffset:{width:0,height:2},
         shadowOpacity:0.1,
         shadowRadius:3.84
+    },
+    itemTitle:{
+        fontSize:16,
+        fontWeight:"bold",
+        color:"#333",
+        marginBottom:5
+    },
+    itemSubtitle:{
+        fontSize:14,
+        color:"#666",
+        marginBottom:5
+    },
+    itemDetail:{
+        fontSize:12,
     }
 
 })
