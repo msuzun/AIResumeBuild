@@ -24,7 +24,8 @@ export interface Skill {
         const error = await res.json();
         throw new Error(error.error || 'Skill eklenemedi');
       }
-      return res.json();
+      const data = await res.json();
+      return data;
     } catch (err) {
       throw err;
     }
@@ -42,7 +43,8 @@ export interface Skill {
         const error = await res.json();
         throw new Error(error.error || 'Skill listesi alınamadı');
       }
-      return res.json();
+      const data = await res.json();
+      return data;
     } catch (err) {
       throw err;
     }
@@ -63,7 +65,8 @@ export interface Skill {
         const error = await res.json();
         throw new Error(error.error || 'Skill silinemedi');
       }
-      return res.json();
+      const data = await res.json();
+      return data;
     } catch (err) {
       throw err;
     }

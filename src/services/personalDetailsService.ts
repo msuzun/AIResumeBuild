@@ -20,16 +20,13 @@ export const getPersonalDetails = async (): Promise<PersonalDetails | null> => {
                 'Content-Type': 'application/json',
             },
         });
-
         if (!response.ok) {
             if (response.status === 404) {
                 return null;
             }
             throw new Error('Failed to fetch personal details');
         }
-
         const data = await response.json();
-        console.log("data getPersonalDetails",data);
         return data;
     } catch (error) {
         console.error('Error fetching personal details:', error);

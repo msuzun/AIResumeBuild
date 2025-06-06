@@ -1,32 +1,23 @@
-import { StyleSheet, Text, View,StatusBar,TouchableOpacity,TextInput } from 'react-native'
+import { StyleSheet, Text, View,StatusBar,TouchableOpacity,TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useAppContext } from '../context/AppContext';
+import {  useNavigation } from '@react-navigation/native';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { createQualification, getQualifications, Qualification } from '../services/qualificationService';
 
 const AddQualificationScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute();
-  const {addQualification} = useAppContext();
 
-  const [degree, setDegree] = useState("");
-  const [institution, setInstitution] = useState("");
-  const [duration, setDuration] = useState("");
-  const [description, setDescription] = useState("");
+  const [qualification, setQualification] = useState<Qualification | null>(null);
 
-  const handleSave = () => {
-    if(!degree || !institution || !duration){
+  const handleSave = async () => {
+    if(!qualification?.degree || !qualification?.institution || !qualification?.duration){
       alert("Please fill all fields");
       return;
     }
-    const qualificationData = {
-      degree,
-      institution,
-      duration,
-      description
-    }
-    addQualification(qualificationData);
+   
+    await createQualification(qualification);
+    Alert.alert('Success', 'Qualification saved successfully');
     navigation.goBack();
   }
   return (
@@ -44,19 +35,19 @@ const AddQualificationScreen = () => {
       <Animated.View style={styles.formContainer} entering={FadeIn.duration(500).delay(200)}>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Degree *</Text>
-          <TextInput style={styles.input} value={degree} onChangeText={setDegree} placeholder="e.g, Enter Degree" placeholderTextColor={"#999"}/>
+          <TextInput style={styles.input} value={qualification?.degree} onChangeText={(text) => setQualification({ ...qualification, degree: text })} placeholder="e.g, Enter Degree" placeholderTextColor={"#999"}/>
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Institution *</Text>
-          <TextInput style={styles.input} value={institution} onChangeText={setInstitution} placeholder="e.g, Enter Institution" placeholderTextColor={"#999"}/>
+          <TextInput style={styles.input} value={qualification?.institution} onChangeText={(text) => setQualification({ ...qualification, institution: text })} placeholder="e.g, Enter Institution" placeholderTextColor={"#999"}/>
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Duration *</Text>
-          <TextInput style={styles.input} value={duration} onChangeText={setDuration} placeholder="e.g, Enter Duration" placeholderTextColor={"#999"}/>
+          <TextInput style={styles.input} value={qualification?.duration} onChangeText={(text) => setQualification({ ...qualification, duration: text })} placeholder="e.g, Enter Duration" placeholderTextColor={"#999"}/>
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Description</Text>
-          <TextInput style={styles.input} value={description} onChangeText={setDescription} placeholder="e.g, Enter Description" placeholderTextColor={"#999"}/>
+          <TextInput style={styles.input} value={qualification?.description} onChangeText={(text) => setQualification({ ...qualification, description: text })} placeholder="e.g, Enter Description" placeholderTextColor={"#999"}/>
         </View>
       </Animated.View>
     </View>

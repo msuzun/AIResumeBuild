@@ -9,8 +9,6 @@ import { addSkill } from '../services/skillService';
 import { getToken } from '../utils/storage';
 const AddSkillScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute();
-  const token = getToken();
   const [skillName, setSkillName] = useState("");
   const [proficiency, setProficiency] = useState("");
 
