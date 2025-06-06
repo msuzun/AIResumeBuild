@@ -5,7 +5,7 @@ import TemplateStackNavigator from "./TemplateStackNavigator";
 import Ionicons from "@expo/vector-icons/Ionicons";
 const Tab = createBottomTabNavigator();
 
-const RootNavigator = () => {
+const RootNavigator = ({ setIsAuthenticated }: { setIsAuthenticated: (auth: boolean) => void }) => {
     return (
         <Tab.Navigator screenOptions={({route})=>({
             tabBarIcon: ({focused, color, size})=>{
@@ -32,7 +32,9 @@ const RootNavigator = () => {
         })}>
             <Tab.Screen name="HomeTab" component={HomeStackNavigator} options={{headerShown: false}} />
             <Tab.Screen name="TemplateTab" component={TemplateStackNavigator} options={{headerShown: false}} />
-            <Tab.Screen name="ProfileTab" component={ProfileStackNavigator} options={{headerShown: false}} />
+            <Tab.Screen name="ProfileTab" options={{headerShown: false}}>
+                {() => <ProfileStackNavigator setIsAuthenticated={setIsAuthenticated} />}
+            </Tab.Screen>
            
         </Tab.Navigator>
     )

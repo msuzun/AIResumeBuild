@@ -1,10 +1,13 @@
 import { StatusBar, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { getPersonalDetails, PersonalDetails } from '../services/personalDetailsService';
+import { logout } from '../services/userService';
 
 type RootStackParamList = {
+  Login: undefined;
   PersonalDetailsScreen: undefined;
   Education: undefined;
   Experience: undefined;
@@ -23,7 +26,7 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ setIsAuthenticated }: { setIsAuthenticated: (auth: boolean) => void }) => {
   const navigation = useNavigation<NavigationProp>();
   const profileSections = [
     { id: '1', title: 'Personal Details', icon: 'person-outline', screen: 'PersonalDetails' },
@@ -39,6 +42,30 @@ const ProfileScreen = () => {
     { id: '11', title: 'Hobbies/Interests', icon: 'hourglass-outline', screen: 'HobbiesInterests' },
     { id: '12', title: 'References', icon: 'people-outline', screen: 'References' },
   ];
+  const [personalDetails, setPersonalDetails] = useState<PersonalDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchPersonalDetails = async () => {
+      try {
+        setIsLoading(true);
+        const details = await getPersonalDetails();
+        setPersonalDetails(details);
+      } catch (error) {
+        console.error('Error fetching personal details:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchPersonalDetails();
+  }, []);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  }
   const renderSection = ({ item, index }: { item: (typeof profileSections)[0]; index: number; }) => {
     return (
       <View>
@@ -57,14 +84,17 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={"#fff"} />
       <View style={styles.header}>
-        <Image source={{ uri: "https://pbs.twimg.com/profile_images/1906088503642820608/7fyYTD1i_400x400.jpg" }} style={styles.avatar} />
+        <Image source={{ uri: personalDetails?.avatar || "https://tweetdelete.net/resources/wp-content/uploads/2023/10/avatar-3814049_640.png" }} style={styles.avatar} />
         <View style={styles.headerTextContainer}>
-          <Text style={styles.name}>MSUZUN</Text>
-          <Text style={styles.title}>Software Engineer</Text>
+          <Text style={styles.name}>{personalDetails?.name || "Name not found"}</Text>
+          <Text style={styles.title}>{personalDetails?.title || "Title not found"}</Text>
         </View>
       </View>
 
       <FlatList data={profileSections} renderItem={renderSection} keyExtractor={item => item.id} contentContainerStyle={styles.list} />
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -139,5 +169,14 @@ const styles = StyleSheet.create({
   },
   tickIcon: {
     marginLeft: 10
+  },
+  logoutButton: {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    borderRadius: 5,
+    margin: 20,
+  },
+  logoutButtonText: {
+    color: "#fff",
   }
 })

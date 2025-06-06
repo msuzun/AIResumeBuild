@@ -19,7 +19,9 @@ export default function App() {
   return (
     <AppProvider>
       <NavigationContainer>
-        {isAuthenticated ? <RootNavigator /> : <LoginScreen setIsAuthenticated={setIsAuthenticated} />}
+        {isAuthenticated
+          ? <RootNavigator setIsAuthenticated={setIsAuthenticated} />
+          : <LoginScreen setIsAuthenticated={setIsAuthenticated} />}
       </NavigationContainer>
     </AppProvider>
   );

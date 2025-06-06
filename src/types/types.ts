@@ -8,5 +8,4 @@ export type RootStackParamList = {
     AddCertificate: { section: string };
     AddExperience: { section: string };
     AddAward: { section: string };
-
 }

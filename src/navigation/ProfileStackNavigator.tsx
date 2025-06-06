@@ -22,10 +22,12 @@ import AddAwardScholarship from "../screens/AddAwardScholarship";
 import AddProjectScreen from "../screens/AddProjectScreen";
 const Stack = createNativeStackNavigator();
 
-const ProfileStackNavigator = () => {
+const ProfileStackNavigator = ({ setIsAuthenticated }: { setIsAuthenticated: (auth: boolean) => void }) => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Profile" options={{ headerShown: false }}>
+                {() => <ProfileScreen setIsAuthenticated={setIsAuthenticated} />}
+            </Stack.Screen>
             <Stack.Screen name="PersonalDetails" component={PersonalDetailsScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Objective" component={ObjectiveScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Experience" component={ExperienceScreen} options={{ headerShown: false }} />

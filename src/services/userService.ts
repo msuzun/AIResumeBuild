@@ -1,5 +1,6 @@
 import { API_URL } from '../utils/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createOrUpdatePersonalDetails } from './personalDetailsService';
 export interface RegisterResponse {
   token?: string;
   error?: string;
@@ -44,6 +45,13 @@ export const login = async (
     const data: LoginResponse = await res.json();
     if (data.token) {
       await AsyncStorage.setItem('token', data.token);
+      await createOrUpdatePersonalDetails({
+        name: data.name,
+        email: data.email,
+        phone: "",
+        address: "",
+        title: ""
+      })
     }
     return data;
   } catch (err) {
