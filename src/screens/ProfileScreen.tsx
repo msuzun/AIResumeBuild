@@ -1,6 +1,6 @@
 import { StatusBar, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { getPersonalDetails, PersonalDetails } from '../services/personalDetailsService';
@@ -44,6 +44,7 @@ const ProfileScreen = ({ setIsAuthenticated }: { setIsAuthenticated: (auth: bool
   ];
   const [personalDetails, setPersonalDetails] = useState<PersonalDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isFocused = useIsFocused();
   useEffect(() => {
     const fetchPersonalDetails = async () => {
       try {
@@ -57,7 +58,7 @@ const ProfileScreen = ({ setIsAuthenticated }: { setIsAuthenticated: (auth: bool
       }
     }
     fetchPersonalDetails();
-  }, []);
+  }, [isFocused]);
   const handleLogout = async () => {
     try {
       await logout();
@@ -69,8 +70,8 @@ const ProfileScreen = ({ setIsAuthenticated }: { setIsAuthenticated: (auth: bool
   const renderSection = ({ item, index }: { item: (typeof profileSections)[0]; index: number; }) => {
     return (
       <View>
-        <TouchableOpacity 
-          style={styles.section} 
+        <TouchableOpacity
+          style={styles.section}
           onPress={() => navigation.navigate(item.screen as keyof RootStackParamList)}
         >
           <Ionicons name={item.icon as any} size={24} color="#007AFF" />
@@ -173,8 +174,11 @@ const styles = StyleSheet.create({
   logoutButton: {
     backgroundColor: "#007AFF",
     padding: 10,
-    borderRadius: 5,
-    margin: 20,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+    marginBottom: 30,
   },
   logoutButtonText: {
     color: "#fff",

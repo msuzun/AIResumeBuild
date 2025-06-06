@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -34,23 +34,24 @@ const PersonalDetailsScreen = () => {
   };
   const handleSave = async () => {
     try {
-        if (!personalDetails) return;
-        
-        const updatedDetails = await createOrUpdatePersonalDetails({
-            name: personalDetails.name,    // Değiştirilemez
-            email: personalDetails.email,  // Değiştirilemez
-            phone,
-            address,
-            title
-        });
-        
-        setPersonalDetails(updatedDetails);
-        // Başarılı mesajı göster
-        Alert.alert('Success', 'Personal details updated successfully');
+      if (!personalDetails) return;
+
+      const updatedDetails = await createOrUpdatePersonalDetails({
+        name: personalDetails.name,    // Değiştirilemez
+        email: personalDetails.email,  // Değiştirilemez
+        phone,
+        address,
+        title
+      });
+
+      setPersonalDetails(updatedDetails);
+      // Başarılı mesajı göster
+      Alert.alert('Success', 'Personal details updated successfully');
+      navigation.goBack();
     } catch (error) {
-        Alert.alert('Error', 'Failed to update personal details');
+      Alert.alert('Error', 'Failed to update personal details');
     }
-};
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={"#007AFF"} />
@@ -64,44 +65,56 @@ const PersonalDetailsScreen = () => {
         </View>
       </Animated.View>
       <Animated.View style={styles.formContainer} entering={FadeIn.duration(700).delay(400)}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            style={[styles.input, styles.disabledInput]}
-            value={personalDetails?.name}
-            editable={false}
-          />
-        </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={[styles.input, styles.disabledInput]}
-            value={personalDetails?.email}
-          />
-        </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Phone</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='Enter your phone number'
-            placeholderTextColor="#999"
-            keyboardType='phone-pad'
-            value={phone}
-            onChangeText={setPhone}
-          />
-        </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Address</Text>
-          <TextInput
-            style={[styles.input, styles.multipleInput]}
-            placeholder='Enter your address'
-            placeholderTextColor="#999"
-            value={address}
-            onChangeText={setAddress}
-            multiline={true}
-            numberOfLines={3}
-          />
-        </View>
+        <ScrollView>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              style={[styles.input, styles.disabledInput]}
+              value={personalDetails?.name}
+              editable={false}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={[styles.input, styles.disabledInput]}
+              value={personalDetails?.email}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              style={styles.input}
+              placeholder='Enter your title'
+              placeholderTextColor="#999"
+              value={title}
+              onChangeText={setTitle}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Phone</Text>
+            <TextInput
+              style={styles.input}
+              placeholder='Enter your phone number'
+              placeholderTextColor="#999"
+              keyboardType='phone-pad'
+              value={phone}
+              onChangeText={setPhone}
+            />
+          </View>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Address</Text>
+            <TextInput
+              style={[styles.input, styles.multipleInput]}
+              placeholder='Enter your address'
+              placeholderTextColor="#999"
+              value={address}
+              onChangeText={setAddress}
+              multiline={true}
+              numberOfLines={3}
+            />
+          </View>
+        </ScrollView>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
@@ -187,5 +200,5 @@ const styles = StyleSheet.create({
   disabledInput: {
     backgroundColor: '#f0f0f0',
     color: '#666',
-}
+  }
 })

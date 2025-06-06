@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { AppProvider } from './src/context/AppContext';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import LoginScreen from './src/screens/LoginScreen';
+import AuthStackNavigator from './src/navigation/AuthStackNavigator';
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function App() {
       <NavigationContainer>
         {isAuthenticated
           ? <RootNavigator setIsAuthenticated={setIsAuthenticated} />
-          : <LoginScreen setIsAuthenticated={setIsAuthenticated} />}
+          : <AuthStackNavigator setIsAuthenticated={setIsAuthenticated} />}
       </NavigationContainer>
     </AppProvider>
   );

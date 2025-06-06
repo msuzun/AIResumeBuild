@@ -1,6 +1,6 @@
 import { API_URL } from '../utils/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createOrUpdatePersonalDetails } from './personalDetailsService';
+import { createOrUpdatePersonalDetails, getPersonalDetails } from './personalDetailsService';
 export interface RegisterResponse {
   token?: string;
   error?: string;
@@ -24,7 +24,9 @@ export const register = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password })
     });
-    return await res.json();
+    const data = await res.json();
+    console.log("data register",data);
+    return data;
   } catch (err) {
     return { error: (err as Error).message };
   }
@@ -35,8 +37,6 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    console.log(email, password);
-    console.log(API_URL);
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -45,13 +45,24 @@ export const login = async (
     const data: LoginResponse = await res.json();
     if (data.token) {
       await AsyncStorage.setItem('token', data.token);
-      await createOrUpdatePersonalDetails({
-        name: data.name,
-        email: data.email,
-        phone: "",
-        address: "",
-        title: ""
-      })
+      const details = await getPersonalDetails();
+      console.log("details",details);
+      console.log("data",data.user);
+      if(!details){
+        if(data.user.name && data.user.email){
+          await createOrUpdatePersonalDetails({
+            name: data.user.name,
+            email: data.user.email,
+            phone: "",
+            address: "",
+            avatar: "",
+            title: ""
+          })
+        }
+        else{
+          return { error: "User not found" };
+        }
+      }
     }
     return data;
   } catch (err) {

@@ -29,6 +29,7 @@ export const getPersonalDetails = async (): Promise<PersonalDetails | null> => {
         }
 
         const data = await response.json();
+        console.log("data getPersonalDetails",data);
         return data;
     } catch (error) {
         console.error('Error fetching personal details:', error);
@@ -47,12 +48,13 @@ export const createOrUpdatePersonalDetails = async (details: Omit<PersonalDetail
             },
             body: JSON.stringify(details),
         });
-
+        console.log("response createOrUpdatePersonalDetails",response);
         if (!response.ok) {
             throw new Error('Failed to create/update personal details');
         }
 
         const data = await response.json();
+        console.log("data createOrUpdatePersonalDetails",data);
         return data;
     } catch (error) {
         console.error('Error creating/updating personal details:', error);
