@@ -47,15 +47,3 @@ src/
    ```bash
    npx expo start
    ```
-
-## Geliştirici Notları
-- Yeni bir CV bölümü eklemek için ilgili context, ekran ve navigation dosyalarına ekleme yapmanız yeterlidir.
-- Navigation ve context tiplerini güncel tutmak, hata riskini azaltır.
-- AsyncStorage ile context verilerini kalıcı hale getirmek için `src/utils/storage.tsx` dosyasındaki fonksiyonları kullanabilirsiniz.
-- UI/UX geliştirmeleri için ortak componentler ve stiller oluşturabilirsiniz.
-
-## Katkı Sağlama
-Pull request ve issue açarak katkıda bulunabilirsiniz.
-
-## Lisans
-MIT 
