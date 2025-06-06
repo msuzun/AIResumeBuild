@@ -1,13 +1,28 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, TextInput } from 'react-native'
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, TextInput, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { FadeIn } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { createOrUpdateObjective, getObjective, Objective } from '../services/objectiveService';
 
 const ObjectiveScreen = () => {
     const navigation = useNavigation();
-    const [text, setText] = useState('');
+    const [objective, setObjective] = useState<Objective | null>(null);
+    const isFocused = useIsFocused();
+    useEffect(() => {
+        const fetchObjective = async () => {
+            const objective = await getObjective();
+            setObjective(objective);
+        }
+        fetchObjective();
+    }, [isFocused]);
+    const handleSave = async () => {
+        const result = await createOrUpdateObjective(objective?.text || "");
+        setObjective(result);
+        Alert.alert('Success', 'Objective saved successfully');
+        navigation.goBack();
+    }
     return (
         <View style={styles.container}>
             <StatusBar barStyle={"light-content"} backgroundColor={"#007AFF"} />
@@ -27,13 +42,13 @@ const ObjectiveScreen = () => {
                         style={[styles.input, styles.multipleInput]}
                         placeholder='Enter your career objective'
                         placeholderTextColor="#999"
-                        value={text}
-                        onChangeText={setText}
+                        value={objective?.text || ""}
+                        onChangeText={(text) => setObjective({ ...objective, text })}
                         multiline={true}
                         numberOfLines={3}
                     />
                 </View>
-                <TouchableOpacity style={styles.saveButton}>
+                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
                     <Text style={styles.saveButtonText}>Save</Text>
                 </TouchableOpacity>
             </Animated.View>
